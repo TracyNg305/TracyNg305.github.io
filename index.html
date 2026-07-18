@@ -1,1 +1,797 @@
+<title>Claude Productivity · Lộ trình học &amp; thực hành</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --paper: #FBF9F5;
+    --surface: #FFFFFF;
+    --surface-2: #F4EFE7;
+    --ink: #23201C;
+    --ink-soft: #5C554C;
+    --ink-faint: #8C8477;
+    --line: #E6DED2;
+    --line-strong: #D8CDBB;
+    --clay: #C96E4A;
+    --clay-deep: #A9542F;
+    --clay-soft: #F3DFD3;
+    --slate: #3B4A54;
+    --slate-soft: #DCE3E6;
+    --plum: #7A5170;
+    --plum-soft: #EDE0EA;
+    --good: #4F7A4A;
+    --good-soft: #E1EBDD;
+    --shadow: 0 1px 2px rgba(35,32,28,.05), 0 8px 24px -12px rgba(35,32,28,.18);
+    --radius: 14px;
+    --maxw: 1160px;
+    /* Hệ font hỗ trợ tiếng Việt đầy đủ để không vỡ dấu. Tiêu đề & thân đều dùng
+       system UI (SF Pro trên macOS, Segoe UI trên Windows) — phân cấp bằng độ đậm/cỡ chữ. */
+    --serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #17150F; --surface: #201D16; --surface-2: #262218;
+      --ink: #F0EADD; --ink-soft: #B7AF9F; --ink-faint: #857D6D;
+      --line: #322D22; --line-strong: #423B2C;
+      --clay: #E08A63; --clay-deep: #EDA079; --clay-soft: #3A2519;
+      --slate: #9FB4BF; --slate-soft: #222B30;
+      --plum: #C79ABD; --plum-soft: #2E2130;
+      --good: #86B27E; --good-soft: #1E2A1B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17150F; --surface: #201D16; --surface-2: #262218;
+    --ink: #F0EADD; --ink-soft: #B7AF9F; --ink-faint: #857D6D;
+    --line: #322D22; --line-strong: #423B2C;
+    --clay: #E08A63; --clay-deep: #EDA079; --clay-soft: #3A2519;
+    --slate: #9FB4BF; --slate-soft: #222B30;
+    --plum: #C79ABD; --plum-soft: #2E2130;
+    --good: #86B27E; --good-soft: #1E2A1B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+  :root[data-theme="light"] {
+    --paper: #FBF9F5; --surface: #FFFFFF; --surface-2: #F4EFE7;
+    --ink: #23201C; --ink-soft: #5C554C; --ink-faint: #8C8477;
+    --line: #E6DED2; --line-strong: #D8CDBB;
+    --clay: #C96E4A; --clay-deep: #A9542F; --clay-soft: #F3DFD3;
+    --slate: #3B4A54; --slate-soft: #DCE3E6;
+    --plum: #7A5170; --plum-soft: #EDE0EA;
+    --good: #4F7A4A; --good-soft: #E1EBDD;
+    --shadow: 0 1px 2px rgba(35,32,28,.05), 0 8px 24px -12px rgba(35,32,28,.18);
+  }
 
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: var(--clay-deep); }
+  ::selection { background: var(--clay-soft); }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+
+  /* Header */
+  header.top { border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 40; }
+  .top-inner { display: flex; align-items: center; gap: 20px; padding: 14px 0; }
+  .brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+  .glyph { width: 40px; height: 40px; border-radius: 11px; flex: none; background: radial-gradient(120% 120% at 30% 20%, var(--clay) 0%, var(--clay-deep) 100%); display: grid; place-items: center; color: #fff; font-family: var(--serif); font-size: 22px; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,.35); }
+  .brand h1 { font-family: var(--serif); font-size: 19px; margin: 0; line-height: 1.1; font-weight: 600; letter-spacing: -.01em; }
+  .brand .sub { font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .12em; margin-top: 2px; }
+  .top-spacer { flex: 1; }
+  .ring-wrap { display: flex; align-items: center; gap: 11px; }
+  .ring { width: 46px; height: 46px; flex: none; }
+  .ring-num { font-family: var(--mono); font-size: 12.5px; font-weight: 600; text-align: right; }
+  .ring-num small { display: block; font-size: 10px; color: var(--ink-faint); font-family: var(--sans); letter-spacing: .04em; }
+  .iconbtn { border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-soft); width: 38px; height: 38px; border-radius: 10px; cursor: pointer; font-size: 16px; display: grid; place-items: center; transition: .15s; }
+  .iconbtn:hover { border-color: var(--clay); color: var(--clay); }
+
+  /* Hero */
+  .hero { padding: 34px 0 8px; }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--clay-deep); }
+  .hero h2 { font-family: var(--serif); font-weight: 600; letter-spacing: -.02em; font-size: clamp(28px, 4.5vw, 44px); line-height: 1.06; margin: 12px 0 10px; text-wrap: balance; max-width: 18ch; }
+  .hero p.lead { font-size: 16.5px; color: var(--ink-soft); max-width: 62ch; margin: 0 0 6px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px; font-size: 13.5px; color: var(--ink-soft); }
+  .meta-row b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .roadmap { margin: 30px 0 8px; }
+  .roadmap h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-faint); margin: 0 0 14px; font-weight: 600; }
+  .timeline { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .tl { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 12px 13px; cursor: pointer; position: relative; transition: .16s; font: inherit; color: inherit; overflow: hidden; }
+  .tl:hover { border-color: var(--clay); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .tl.active { border-color: var(--clay); background: var(--clay-soft); }
+  .tl .lv { font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em; color: var(--clay-deep); text-transform: uppercase; }
+  .tl .nm { font-family: var(--serif); font-size: 14.5px; font-weight: 600; margin-top: 5px; line-height: 1.18; }
+  .tl .barmini { height: 4px; border-radius: 4px; background: var(--line-strong); margin-top: 11px; overflow: hidden; }
+  .tl .barmini i { display: block; height: 100%; background: var(--clay); border-radius: 4px; transition: width .4s; }
+  .tl .done-tick { position: absolute; top: 10px; right: 10px; width: 16px; height: 16px; border-radius: 50%; background: var(--good); color: #fff; display: none; place-items: center; font-size: 10px; }
+  .tl.complete .done-tick { display: grid; }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: 246px 1fr; gap: 30px; align-items: start; padding: 26px 0 70px; }
+  nav.rail { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 4px; }
+  .rail-h { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-faint); margin: 4px 8px 8px; font-weight: 600; }
+  .navitem { display: flex; gap: 11px; align-items: flex-start; text-align: left; width: 100%; border: 1px solid transparent; background: transparent; border-radius: 10px; padding: 9px 10px; cursor: pointer; font: inherit; color: var(--ink-soft); transition: .14s; }
+  .navitem:hover { background: var(--surface-2); color: var(--ink); }
+  .navitem.active { background: var(--surface); border-color: var(--line-strong); color: var(--ink); box-shadow: var(--shadow); }
+  .navitem .no { font-family: var(--mono); font-size: 12px; color: var(--clay-deep); font-weight: 600; flex: none; width: 20px; padding-top: 1px; }
+  .navitem .txt { min-width: 0; }
+  .navitem .t1 { font-size: 13.5px; font-weight: 600; line-height: 1.25; font-family: var(--serif); }
+  .navitem .t2 { font-size: 11px; color: var(--ink-faint); font-family: var(--mono); margin-top: 3px; font-variant-numeric: tabular-nums; }
+
+  main { min-width: 0; }
+  .panel-head { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 26px; }
+  .tagrow { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 13px; }
+  .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .03em; padding: 3px 9px; border-radius: 20px; border: 1px solid var(--line-strong); color: var(--ink-soft); }
+  .tag.level { background: var(--slate-soft); border-color: transparent; color: var(--slate); }
+  .tag.diff { background: var(--clay-soft); border-color: transparent; color: var(--clay-deep); }
+  .panel-head h2 { font-family: var(--serif); font-weight: 600; letter-spacing: -.015em; font-size: clamp(24px, 3.6vw, 32px); margin: 0 0 10px; line-height: 1.1; text-wrap: balance; }
+  .panel-head p { color: var(--ink-soft); font-size: 15.5px; margin: 0; max-width: 64ch; }
+
+  .outcomes { background: var(--surface-2); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 30px; border: 1px solid var(--line); }
+  .outcomes h4 { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-faint); font-weight: 600; }
+  .outcomes ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .outcomes li { display: flex; gap: 10px; font-size: 14px; color: var(--ink-soft); }
+  .outcomes li::before { content: "→"; color: var(--clay); font-weight: 700; flex: none; }
+
+  .sec-label { display: flex; align-items: baseline; gap: 12px; margin: 8px 0 16px; }
+  .sec-label h3 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin: 0; }
+  .sec-label .cnt { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); }
+  .sec-label .rule { flex: 1; height: 1px; background: var(--line); }
+
+  /* lessons */
+  .lessons { display: flex; flex-direction: column; gap: 9px; margin-bottom: 40px; }
+  .lesson { display: flex; gap: 14px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 15px 16px; transition: .15s; }
+  .lesson:hover { border-color: var(--line-strong); }
+  .lesson.done { background: var(--good-soft); border-color: transparent; }
+  .check { flex: none; width: 24px; height: 24px; border-radius: 7px; border: 1.5px solid var(--line-strong); background: var(--paper); cursor: pointer; display: grid; place-items: center; margin-top: 1px; transition: .15s; color: transparent; }
+  .check:hover { border-color: var(--clay); }
+  .lesson.done .check { background: var(--good); border-color: var(--good); color: #fff; }
+  .lesson .body { min-width: 0; flex: 1; }
+  .lesson .l-top { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .lesson .l-no { font-family: var(--mono); font-size: 12px; color: var(--clay-deep); font-weight: 600; }
+  .lesson .l-title { font-family: var(--serif); font-size: 16px; font-weight: 600; line-height: 1.3; }
+  .lesson.done .l-title { text-decoration: line-through; text-decoration-color: var(--ink-faint); opacity: .75; }
+  .lesson .l-desc { font-size: 13.5px; color: var(--ink-soft); margin-top: 4px; }
+  .lesson .l-dur { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); flex: none; margin-left: auto; padding-top: 2px; }
+  .chip-adv { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--plum); background: var(--plum-soft); border-radius: 20px; padding: 2px 8px; }
+  .l-sum { display: flex; gap: 8px; margin-top: 9px; font-size: 13px; color: var(--ink); background: var(--surface-2); border-radius: 8px; padding: 8px 11px; line-height: 1.5; }
+  .l-sum .k { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--clay-deep); flex: none; padding-top: 2px; }
+  .lesson.done .l-sum { background: color-mix(in srgb, var(--good-soft) 60%, var(--surface)); }
+  .l-actions { margin-top: 10px; }
+  .vidbtn { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-soft); border-radius: 8px; font: inherit; font-size: 12.5px; padding: 5px 11px; cursor: pointer; text-decoration: none; transition: .14s; }
+  .vidbtn:hover { border-color: var(--clay); color: var(--clay); }
+  .vidbtn .play { width: 16px; height: 16px; border-radius: 50%; background: var(--clay); color: #fff; display: grid; place-items: center; font-size: 8px; flex: none; }
+
+  /* exercises */
+  .exercises { display: grid; gap: 16px; }
+  .ex { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 18px 19px; box-shadow: var(--shadow); transition: .15s; }
+  .ex.done { border-color: var(--good); }
+  .ex.adv { border-left: 3px solid var(--plum); }
+  .ex-head { display: flex; gap: 12px; align-items: flex-start; }
+  .ex-icon { flex: none; width: 34px; height: 34px; border-radius: 9px; background: var(--clay-soft); color: var(--clay-deep); display: grid; place-items: center; font-size: 16px; }
+  .ex.adv .ex-icon { background: var(--plum-soft); color: var(--plum); }
+  .ex.done .ex-icon { background: var(--good-soft); color: var(--good); }
+  .ex-head .ht { flex: 1; min-width: 0; }
+  .ex-head .htop { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .ex-head h4 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin: 0 0 3px; line-height: 1.25; }
+  .ex-head .goal { font-size: 13px; color: var(--ink-soft); }
+  .ex-steps { list-style: none; margin: 15px 0 0; padding: 0; display: grid; gap: 7px; counter-reset: s; }
+  .ex-steps li { display: flex; gap: 11px; font-size: 13.8px; color: var(--ink-soft); }
+  .ex-steps li::before { counter-increment: s; content: counter(s); flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--surface-2); color: var(--ink); font-family: var(--mono); font-size: 11px; font-weight: 600; display: grid; place-items: center; }
+
+  .prompt { margin-top: 15px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface-2); overflow: hidden; }
+  .prompt-h { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); }
+  .prompt-h .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--clay); }
+  .prompt-h .copy { margin-left: auto; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-soft); border-radius: 7px; font: inherit; font-size: 11px; padding: 4px 10px; cursor: pointer; letter-spacing: 0; text-transform: none; font-family: var(--sans); transition: .14s; }
+  .prompt-h .copy:hover { border-color: var(--clay); color: var(--clay); }
+  .prompt-h .copy.ok { color: var(--good); border-color: var(--good); }
+  .prompt pre { margin: 0; padding: 13px 14px; font-family: var(--mono); font-size: 12.8px; line-height: 1.65; color: var(--ink); white-space: pre-wrap; word-break: break-word; overflow-x: auto; }
+  .ex-foot { display: flex; align-items: center; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
+  .markdone { border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-soft); border-radius: 9px; font: inherit; font-size: 13px; padding: 7px 14px; cursor: pointer; transition: .14s; display: inline-flex; align-items: center; gap: 7px; font-weight: 500; }
+  .markdone:hover { border-color: var(--clay); color: var(--clay); }
+  .ex.done .markdone { background: var(--good); border-color: var(--good); color: #fff; }
+  .tip { font-size: 12.5px; color: var(--ink-faint); }
+  .tip b { color: var(--clay-deep); }
+
+  /* host banner */
+  .hostnote { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--clay); border-radius: 12px; padding: 13px 16px; margin: 22px 0 0; font-size: 13px; color: var(--ink-soft); }
+  .hostnote b { color: var(--ink); }
+  .hostnote code { font-family: var(--mono); font-size: 12px; background: var(--surface-2); padding: 1px 6px; border-radius: 5px; color: var(--clay-deep); }
+
+  footer { border-top: 1px solid var(--line); padding: 26px 0 50px; color: var(--ink-faint); font-size: 12.5px; text-align: center; }
+  footer .disc { max-width: 60ch; margin: 6px auto 0; }
+
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: var(--paper); padding: 10px 18px; border-radius: 999px; font-size: 13px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .25s; z-index: 60; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* capstone CTA + rubric */
+  .cap-cta { display: flex; align-items: center; gap: 14px; width: 100%; margin-top: 12px; text-align: left; cursor: pointer; font: inherit; color: inherit; border: 1px solid var(--clay); border-radius: 14px; padding: 13px 16px; background: linear-gradient(100deg, var(--clay-soft), var(--surface)); transition: .16s; }
+  .cap-cta:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .cap-cta.active { outline: 2px solid var(--clay); outline-offset: 1px; }
+  .cc-badge { flex: none; width: 38px; height: 38px; border-radius: 11px; background: var(--clay); color: #fff; display: grid; place-items: center; font-size: 18px; }
+  .cc-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .cc-txt b { font-size: 15px; }
+  .cc-txt small { color: var(--ink-soft); font-size: 12.5px; }
+  .cc-score { flex: none; font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--clay-deep); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 20px; padding: 4px 12px; white-space: nowrap; }
+
+  .navitem.cap { border-color: var(--clay); background: var(--clay-soft); margin-top: 8px; }
+  .navitem.cap .no { color: var(--clay-deep); }
+  .navitem.cap.active { outline: 1px solid var(--clay); }
+
+  .score-card { display: flex; gap: 20px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  .sc-num { flex: none; display: flex; align-items: baseline; gap: 2px; }
+  .sc-big { font-size: 46px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.02em; color: var(--clay-deep); line-height: 1; }
+  .sc-den { font-size: 16px; color: var(--ink-faint); font-family: var(--mono); }
+  .sc-mid { flex: 1; min-width: 0; }
+  .sc-band { font-size: 17px; font-weight: 700; }
+  .sc-note { font-size: 13px; color: var(--ink-soft); margin: 2px 0 9px; }
+  .sc-bar { height: 8px; border-radius: 8px; background: var(--surface-2); overflow: hidden; }
+  .sc-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--clay), var(--clay-deep)); border-radius: 8px; transition: width .4s; }
+  .sc-meta { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); margin-top: 7px; }
+
+  .rubric { display: grid; gap: 12px; }
+  .rub { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 14px 15px; }
+  .rub-info { display: flex; gap: 12px; align-items: flex-start; }
+  .rub-mod { flex: none; font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--clay-deep); background: var(--clay-soft); border-radius: 7px; padding: 3px 8px; }
+  .rub-tx { flex: 1; min-width: 0; }
+  .rub-name { font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .rub-desc { font-size: 12.8px; color: var(--ink-soft); margin-top: 3px; }
+  .rub-w { flex: none; font-family: var(--mono); font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .rub-levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 12px; }
+  .rlv { display: flex; flex-direction: column; align-items: center; gap: 3px; border: 1px solid var(--line-strong); background: var(--paper); border-radius: 9px; padding: 7px 4px; cursor: pointer; font: inherit; transition: .13s; color: var(--ink-soft); }
+  .rlv:hover { border-color: var(--clay); color: var(--clay); }
+  .rlv-n { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+  .rlv-l { font-size: 10.5px; text-align: center; line-height: 1.2; }
+  .rlv.on { background: var(--clay); border-color: var(--clay); color: #fff; }
+  .rlv.on .rlv-n { color: #fff; }
+  @media (max-width: 620px) { .rlv-l { display: none; } .rlv { padding: 9px 4px; } .score-card { flex-direction: column; align-items: flex-start; gap: 12px; } }
+
+  :focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; border-radius: 4px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.rail { position: static; flex-direction: row; overflow-x: auto; padding-bottom: 6px; gap: 8px; }
+    nav.rail .rail-h { display: none; }
+    .navitem { min-width: 200px; }
+    .timeline { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .timeline { grid-template-columns: repeat(2, 1fr); }
+    .top-inner { flex-wrap: wrap; }
+    .ring-wrap .ring-num { display: none; }
+  }
+</style>
+
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand">
+      <div class="glyph">✳</div>
+      <div>
+        <h1>Claude Productivity</h1>
+        <div class="sub">Lộ trình học &amp; thực hành</div>
+      </div>
+    </div>
+    <div class="top-spacer"></div>
+    <div class="ring-wrap">
+      <div class="ring-num" id="ringNum">0%<small>Hoàn thành</small></div>
+      <svg class="ring" viewBox="0 0 46 46" id="ringSvg" aria-hidden="true">
+        <circle cx="23" cy="23" r="19" fill="none" stroke="var(--line-strong)" stroke-width="5"/>
+        <circle id="ringArc" cx="23" cy="23" r="19" fill="none" stroke="var(--clay)" stroke-width="5" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4" transform="rotate(-90 23 23)"/>
+      </svg>
+    </div>
+    <button class="iconbtn" id="themeBtn" title="Đổi giao diện sáng/tối" aria-label="Đổi giao diện">◐</button>
+    <button class="iconbtn" id="resetBtn" title="Đặt lại tiến độ" aria-label="Đặt lại tiến độ">⟲</button>
+  </div>
+</header>
+
+<section class="hero wrap">
+  <div class="kicker">6 cấp độ · 58 bài học · thực chiến + nâng cao</div>
+  <h2>Biến Claude thành “bộ não thứ hai” cho công việc mỗi ngày.</h2>
+  <p class="lead">Lộ trình đi từ nền tảng đến kỹ thuật: hiểu model, viết prompt chuẩn, dùng Artifacts &amp; Projects, tự động hoá bằng Cowork và Skills, rồi tự dựng công cụ riêng với Claude Code. Mỗi bài có <b>tóm tắt cốt lõi</b> &amp; <b>video</b>; mỗi cấp có bài tập thực chiến lẫn <b>bài tập nâng cao</b> kèm prompt copy được.</p>
+  <div class="meta-row">
+    <span>Đối tượng: <b>Trưởng nhóm · Quản lý · Founder</b></span>
+    <span>Thời lượng tham khảo: <b>~11 giờ</b></span>
+    <span>Bài học đã hoàn thành: <b id="metaDone">0/0</b></span>
+  </div>
+
+  <div class="hostnote">
+    <span style="font-size:16px">🖥️</span>
+    <div><b>Học ở đâu?</b> Trang này chạy song song 2 nơi: bản <b>Claude public</b> (link chia sẻ cho nhiều tài khoản) và bản <b>host local</b> trên máy bạn (chạy <code>python3 -m http.server</code> trong thư mục chứa file). Ở bản local, bạn có thể thay link video mẫu bằng link bài giảng thật của mình — sửa trường <code>vid</code> trong phần <code>DATA</code> của file.</div>
+  </div>
+
+  <div class="roadmap">
+    <h3>Lộ trình 6 cấp độ</h3>
+    <div class="timeline" id="timeline"></div>
+    <button class="cap-cta" id="capCta">
+      <span class="cc-badge">★</span>
+      <span class="cc-txt"><b>Bài tập cuối khóa</b><small>Dự án tổng hợp cả 6 cấp + bảng tự chấm điểm /100 và xếp loại</small></span>
+      <span class="cc-score" id="capCtaScore">Chưa chấm</span>
+    </button>
+  </div>
+</section>
+
+<div class="wrap layout">
+  <nav class="rail" id="rail" aria-label="Danh sách module">
+    <div class="rail-h">Nội dung khoá học</div>
+  </nav>
+  <main id="main" aria-live="polite"></main>
+</div>
+
+<footer class="wrap">
+  <div>Trang học tương tác lấy cảm hứng từ chương trình Claude Productivity.</div>
+  <div class="disc">Công cụ học tập &amp; luyện tập. Tiến độ lưu trong trình duyệt của bạn (localStorage) — tách riêng theo từng thiết bị/tài khoản. Tên sản phẩm Claude thuộc về Anthropic.</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================================
+   GẮN LINK VIDEO THẬT (bản host local):
+   Mỗi bài học có thuộc tính  vid: "..."  — mặc định là link tra cứu công khai.
+   Thay bằng URL bài giảng của khoá SkillsBridge, ví dụ:
+       vid: "https://www.skillsbridge.vn/.../bai-1"
+   ========================================================================= */
+const yt = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+
+const DATA = [
+  {
+    id: "m1", lv: "Cấp 1", tier: "Nhập môn", diff: "Cơ bản", short: "Tổng quan Claude",
+    title: "Tổng quan về Claude",
+    intro: "Hiểu Claude là gì, vai trò trong hệ sinh thái AI và cách chọn đúng model cho từng loại công việc — nền tảng để mọi thứ sau đó hiệu quả và tiết kiệm.",
+    tags: ["Model", "Token", "Định hướng"],
+    outcomes: [
+      "Phân biệt điểm mạnh của Opus, Sonnet, Haiku và chế độ suy luận mở rộng.",
+      "Chọn model phù hợp theo độ khó, tốc độ và chi phí công việc.",
+      "Quản lý & tối ưu token để làm việc dài mà không lãng phí."
+    ],
+    lessons: [
+      { t: "Claude là gì & vai trò trong hệ sinh thái AI", d: "Bức tranh tổng thể: Claude đứng ở đâu và giải quyết bài toán gì cho công việc tri thức.", dur: "12'", sum: "Claude mạnh ở lập luận dài, viết & phân tích văn bản — chọn Claude khi cần chất lượng suy nghĩ, không chỉ tốc độ.", vid: yt("Claude AI la gi tong quan Anthropic") },
+      { t: "So sánh model: Opus · Sonnet · Haiku", d: "Khi nào cần model mạnh nhất, khi nào cần nhanh & rẻ.", dur: "16'", sum: "Opus cho việc khó/chiến lược, Sonnet cân bằng cho đa số việc, Haiku cho tác vụ nhanh & khối lượng lớn.", vid: yt("Claude Opus Sonnet Haiku so sanh") },
+      { t: "Suy luận mở rộng (Extended / Adaptive thinking)", d: "Cho Claude “nghĩ kỹ” với bài toán phức tạp và khi nào nên bật.", dur: "10'", sum: "Bật extended thinking khi bài toán nhiều bước; tắt khi cần trả lời nhanh để đỡ token.", vid: yt("Claude extended thinking mode") },
+      { t: "Quản lý & tối ưu token", d: "Hiểu context window, cắt bớt nhiễu, giữ hội thoại gọn và hiệu quả.", dur: "13'", sum: "Context là bộ nhớ hữu hạn: gom việc theo chủ đề, tóm tắt định kỳ, tránh dán dữ liệu thừa.", vid: yt("Claude context window token toi uu") },
+      { t: "Hệ thống prompt nhiều lớp (system · project · message)", d: "Đặt nguyên tắc ở lớp cao, chi tiết ở lớp thấp để nhất quán mà vẫn linh hoạt.", dur: "14'", sum: "Nguyên tắc chung đặt ở custom instructions/Project; yêu cầu cụ thể đặt trong từng tin nhắn.", vid: yt("Claude system prompt custom instructions"), adv: true },
+      { t: "Đánh giá đầu ra & khi nào KHÔNG dùng AI", d: "Thiết lập tiêu chí kiểm tra và giữ con người ra quyết định cuối.", dur: "12'", sum: "Luôn có bước đối chiếu nguồn & tiêu chí nghiệm thu; việc rủi ro cao/pháp lý cần người xác nhận.", vid: yt("danh gia chat luong AI output khi nao khong dung AI"), adv: true }
+    ],
+    exercises: [
+      { icon: "🎯", title: "Chọn đúng model cho 3 tình huống", goal: "Ra quyết định chọn model dựa trên độ khó – tốc độ – chi phí.",
+        steps: ["Liệt kê 3 việc bạn thật sự làm tuần này (vd: tóm tắt email, phân tích chiến lược, trả lời khách hàng nhanh).", "Với mỗi việc, chọn Opus / Sonnet / Haiku và viết 1 câu lý do.", "Hỏi chính Claude để đối chiếu với lựa chọn của bạn."],
+        prompt: "Tôi là [vai trò của bạn]. Đây là 3 công việc tôi cần làm tuần này:\n1) ...\n2) ...\n3) ...\nVới mỗi việc, hãy đề xuất nên dùng Claude Opus, Sonnet hay Haiku, giải thích ngắn gọn dựa trên độ phức tạp, tốc độ và chi phí. Trình bày dạng bảng." },
+      { icon: "🪙", title: "Rút gọn prompt để tiết kiệm token", goal: "Tập tư duy viết ngắn – rõ – đủ ngữ cảnh.",
+        steps: ["Lấy một prompt dài bạn từng dùng (hoặc dán một đoạn yêu cầu lan man).", "Nhờ Claude rút gọn mà vẫn giữ đủ thông tin.", "So sánh kết quả đầu ra của bản dài và bản rút gọn."],
+        prompt: "Đây là prompt tôi đang dùng:\n\"\"\"\n[dán prompt dài của bạn]\n\"\"\"\nHãy viết lại thành phiên bản ngắn gọn, rõ ràng, giữ nguyên mục tiêu và ngữ cảnh quan trọng nhưng tiết kiệm token. Giải thích bạn đã cắt bỏ những gì và vì sao." },
+      { icon: "🧭", title: "Bảng quyết định chọn model cho cả nhóm", goal: "Chuẩn hoá lựa chọn model để cả team dùng nhất quán.", adv: true,
+        steps: ["Liệt kê 6–8 loại việc lặp lại của nhóm bạn.", "Yêu cầu Claude lập bảng: loại việc → model đề xuất → lý do → mẹo prompt.", "Rà soát, chỉnh theo thực tế và lưu lại làm 'cẩm nang chọn model'."],
+        prompt: "Nhóm tôi là [phòng ban/lĩnh vực]. Các loại việc lặp lại gồm:\n- ...\n- ...\nHãy lập một BẢNG QUYẾT ĐỊNH chọn model Claude cho từng loại việc, gồm cột: Loại việc | Model đề xuất (Opus/Sonnet/Haiku) | Lý do | Mẹo prompt ngắn. Cuối cùng tóm tắt 3 nguyên tắc chọn model dễ nhớ." }
+    ]
+  },
+  {
+    id: "m2", lv: "Cấp 2", tier: "Khởi động", diff: "Cơ bản", short: "Bắt đầu với Claude",
+    title: "Bắt đầu với Claude",
+    intro: "Thiết lập Claude thành trợ lý cá nhân thông minh: làm chủ giao diện, cá nhân hoá, viết prompt theo cấu trúc và áp dụng vào việc thường ngày.",
+    tags: ["Prompt", "Cá nhân hoá", "Thói quen"],
+    outcomes: [
+      "Cấu hình custom instructions phản ánh đúng vai trò & phong cách của bạn.",
+      "Viết prompt theo khung Vai trò – Ngữ cảnh – Nhiệm vụ – Định dạng.",
+      "Đưa Claude vào các tác vụ hằng ngày: email, tóm tắt, brainstorm, nghiên cứu."
+    ],
+    lessons: [
+      { t: "Làm quen giao diện & thao tác cơ bản", d: "Chat, lịch sử, đính kèm tệp, các phím tắt hay dùng.", dur: "9'", sum: "Nắm chỗ đính kèm file, tạo hội thoại mới theo chủ đề và tìm lại lịch sử là đủ để bắt đầu nhanh.", vid: yt("Claude AI giao dien co ban huong dan") },
+      { t: "Cá nhân hoá & custom instructions", d: "Dạy Claude biết bạn là ai để trả lời đúng ngữ cảnh ngay từ đầu.", dur: "12'", sum: "Khai báo vai trò, phong cách, điều cần tránh một lần để mọi câu trả lời sau đúng ngữ cảnh.", vid: yt("Claude custom instructions personalization") },
+      { t: "Cấu trúc prompt hiệu quả (R-C-T-F)", d: "Vai trò · Ngữ cảnh · Nhiệm vụ · Định dạng — khung viết prompt chắc chắn.", dur: "18'", sum: "Đủ 4 phần Vai trò–Ngữ cảnh–Nhiệm vụ–Định dạng thì kết quả bám sát và ít phải sửa.", vid: yt("prompt engineering Claude Role Context Task Format") },
+      { t: "Khám phá extensions & tích hợp", d: "Mở rộng khả năng của Claude bằng các tiện ích kết nối.", dur: "11'", sum: "Extensions giúp Claude làm việc với công cụ khác — chỉ bật cái bạn thật sự cần.", vid: yt("Claude extensions integrations") },
+      { t: "Ứng dụng vào công việc hằng ngày", d: "Từ soạn email đến chuẩn bị họp và xử lý dữ liệu nhanh.", dur: "15'", sum: "Biến các việc lặp lại (email, tóm tắt, checklist) thành prompt mẫu để làm trong vài giây.", vid: yt("Claude AI cong viec hang ngay productivity") },
+      { t: "Few-shot & prompt chaining", d: "Cho ví dụ mẫu và nối nhiều bước để nâng chất lượng ổn định.", dur: "14'", sum: "Đưa 1–2 ví dụ đầu ra mong muốn (few-shot) và chia việc lớn thành chuỗi bước nhỏ.", vid: yt("few shot prompting prompt chaining"), adv: true },
+      { t: "Xây thư viện prompt cá nhân", d: "Lưu prompt tốt thành bộ mẫu tái dùng, đặt tên theo tình huống.", dur: "10'", sum: "Prompt tốt là tài sản: lưu lại, đặt tên theo tình huống, tái dùng thay vì gõ lại mỗi lần.", vid: yt("prompt library template quan ly prompt"), adv: true }
+    ],
+    exercises: [
+      { icon: "🧩", title: "Viết custom instructions cho riêng bạn", goal: "Để Claude luôn trả lời đúng vai trò, giọng văn và bối cảnh của bạn.",
+        steps: ["Điền vai trò, lĩnh vực, phong cách mong muốn và điều cần tránh.", "Dán vào phần cá nhân hoá / đầu hội thoại.", "Thử một câu hỏi và tinh chỉnh cho tới khi giọng văn đúng ý."],
+        prompt: "Hãy ghi nhớ bối cảnh của tôi cho mọi câu trả lời sau:\n- Vai trò: [vd: Trưởng phòng Marketing tại công ty B2B]\n- Ngành: [...]\n- Phong cách trả lời mong muốn: [vd: ngắn gọn, đi thẳng vấn đề, có ví dụ]\n- Cần tránh: [vd: lý thuyết dài dòng, sáo rỗng]\nTừ giờ hãy trả lời phù hợp bối cảnh này. Xác nhận ngắn gọn là bạn đã hiểu." },
+      { icon: "🏗️", title: "Prompt theo khung R-C-T-F", goal: "Biến một yêu cầu mơ hồ thành prompt có cấu trúc rõ ràng.",
+        steps: ["Chọn một việc thật (vd: viết thông báo nội bộ về chính sách mới).", "Điền lần lượt 4 phần: Vai trò – Ngữ cảnh – Nhiệm vụ – Định dạng.", "Chạy thử, rồi chỉ chỉnh phần Định dạng để thấy đầu ra thay đổi."],
+        prompt: "Vai trò: Bạn là [chuyên gia ...].\nNgữ cảnh: [tình huống, đối tượng đọc, ràng buộc].\nNhiệm vụ: [việc cụ thể cần làm].\nĐịnh dạng: [vd: email 150 từ, có tiêu đề, giọng thân thiện, kết bằng lời kêu gọi hành động].\nHãy thực hiện." },
+      { icon: "✉️", title: "Trợ lý email & tóm tắt họp", goal: "Rút ngắn hai việc tốn thời gian nhất trong ngày.",
+        steps: ["Dán một chuỗi email hoặc ghi chú cuộc họp lộn xộn.", "Yêu cầu tóm tắt + việc cần làm + nháp phản hồi.", "Chỉnh giọng văn cho hợp người nhận."],
+        prompt: "Đây là nội dung email/ghi chú họp:\n\"\"\"\n[dán nội dung]\n\"\"\"\nHãy:\n1) Tóm tắt trong 5 gạch đầu dòng.\n2) Liệt kê các việc cần làm kèm người phụ trách (nếu có).\n3) Soạn một email phản hồi lịch sự, ngắn gọn.\nGiọng văn: chuyên nghiệp, thân thiện." },
+      { icon: "📚", title: "Xây thư viện 5 prompt lõi cho vai trò của bạn", goal: "Có sẵn bộ 'vũ khí' prompt tái dùng cho công việc hằng tuần.", adv: true,
+        steps: ["Chọn 5 việc bạn làm thường xuyên nhất.", "Yêu cầu Claude soạn 5 prompt mẫu chuẩn R-C-T-F, có chỗ trống điền nhanh.", "Lưu lại, dùng thử 1 tuần rồi tinh chỉnh."],
+        prompt: "Tôi là [vai trò]. 5 việc tôi làm thường xuyên nhất:\n1) ... 2) ... 3) ... 4) ... 5) ...\nHãy soạn cho tôi 5 prompt mẫu tái sử dụng (theo khung Vai trò–Ngữ cảnh–Nhiệm vụ–Định dạng), mỗi prompt có [chỗ trống] để tôi điền nhanh mỗi lần dùng. Đặt tên gợi nhớ cho từng prompt." }
+    ]
+  },
+  {
+    id: "m3", lv: "Cấp 3", tier: "Ứng dụng", diff: "Trung cấp", short: "Artifacts & Projects",
+    title: "Claude Artifacts & Projects",
+    intro: "Đi từ hội thoại sang sản phẩm: tạo tài liệu hoàn chỉnh, dashboard, mini-tool bằng Artifacts và dựng không gian làm việc theo phòng ban bằng Projects.",
+    tags: ["Artifacts", "Projects", "Brand voice"],
+    outcomes: [
+      "Dùng Artifacts để tạo báo cáo, proposal, SOP, thậm chí công cụ nhỏ.",
+      "Lập Project với kho tri thức nội bộ để phân tích tài liệu nhất quán.",
+      "Giữ brand voice đồng nhất và biết khi nào dùng Chat vs Projects."
+    ],
+    lessons: [
+      { t: "Tạo tài liệu hoàn chỉnh với Artifacts", d: "Báo cáo, proposal, SOP — soạn và chỉnh trực tiếp trong Artifact.", dur: "16'", sum: "Artifact là khung soạn thảo sống: yêu cầu tạo cả tài liệu rồi chỉnh trực tiếp thay vì copy qua lại.", vid: yt("Claude Artifacts huong dan tao tai lieu") },
+      { t: "Dashboard & mini-tool", d: "Dựng bảng theo dõi, máy tính, công cụ nhỏ chạy được ngay.", dur: "18'", sum: "Chỉ cần mô tả nhu cầu, Claude dựng công cụ web chạy được ngay — không cần code.", vid: yt("Claude Artifacts dashboard mini tool no code") },
+      { t: "Projects cho phân tích tài liệu nội bộ", d: "Nạp tài liệu vào Project để Claude trả lời dựa trên dữ liệu của bạn.", dur: "17'", sum: "Project = không gian có kho tri thức riêng; câu trả lời bám tài liệu bạn nạp vào.", vid: yt("Claude Projects knowledge base huong dan") },
+      { t: "Viết nhất quán theo brand voice", d: "Nạp guideline để mọi nội dung giữ đúng giọng thương hiệu.", dur: "12'", sum: "Nạp mẫu & guideline giọng thương hiệu vào Project để mọi nội dung ra đều đồng nhất.", vid: yt("brand voice consistency AI writing") },
+      { t: "Chat vs Projects — khi nào dùng gì", d: "Chọn đúng không gian làm việc theo tính chất công việc.", dur: "9'", sum: "Việc lẻ, nhanh → Chat. Việc lặp lại, cần kho tài liệu & nhất quán → Projects.", vid: yt("Claude Chat vs Projects khi nao dung") },
+      { t: "Iterate Artifact qua nhiều vòng", d: "Chỉnh từng phần thay vì làm lại từ đầu.", dur: "13'", sum: "Mô tả thay đổi cụ thể ('đổi màu nút', 'thêm cột') để giữ phần đã tốt, chỉ sửa phần cần.", vid: yt("Claude Artifacts iterate chinh sua"), adv: true },
+      { t: "Chuẩn hoá kho tri thức cho Project", d: "Tài liệu sạch giúp Claude trích dẫn chính xác hơn.", dur: "12'", sum: "Tài liệu có tiêu đề, ngày tháng, cấu trúc rõ giúp Claude trả lời & trích dẫn đúng hơn.", vid: yt("chuan hoa tai lieu knowledge base RAG"), adv: true }
+    ],
+    exercises: [
+      { icon: "📊", title: "Dựng một dashboard/mini-tool", goal: "Tạo công cụ dùng được ngay chỉ bằng mô tả.",
+        steps: ["Mô tả công cụ bạn muốn (vd: theo dõi KPI tuần, máy tính ROI).", "Nhận Artifact, thử nhập số liệu thật.", "Yêu cầu tinh chỉnh giao diện & thêm tính năng."],
+        prompt: "Hãy tạo cho tôi một [dashboard/mini-tool] dạng trang web trong Artifact để [mục tiêu, vd: theo dõi KPI marketing hàng tuần]. Yêu cầu:\n- Nhập được: [các trường dữ liệu]\n- Hiển thị: [biểu đồ/chỉ số cần thấy]\n- Giao diện gọn, dễ dùng.\nSau khi tạo xong, hướng dẫn tôi cách nhập dữ liệu." },
+      { icon: "🗂️", title: "Lập Project với kho tri thức", goal: "Để Claude trả lời dựa trên tài liệu của chính bạn.",
+        steps: ["Tạo một Project mới, đặt tên theo phòng ban/chủ đề.", "Nạp 3–5 tài liệu nền (quy trình, FAQ, tài liệu sản phẩm).", "Đặt câu hỏi kiểm tra xem Claude có bám đúng tài liệu không."],
+        prompt: "Đây là bộ tài liệu của phòng [tên]. Hãy dùng CHÚNG làm nguồn chính.\nHãy trả lời câu hỏi sau chỉ dựa trên tài liệu đã cung cấp, và nếu không có thông tin thì nói rõ:\nCâu hỏi: [câu hỏi thực tế của bạn]\nTrích dẫn phần tài liệu bạn dựa vào." },
+      { icon: "🎙️", title: "Viết theo brand voice", goal: "Giữ giọng thương hiệu đồng nhất qua mọi nội dung.",
+        steps: ["Dán 2–3 đoạn nội dung mẫu thể hiện đúng giọng thương hiệu.", "Yêu cầu Claude rút ra bộ nguyên tắc giọng văn.", "Nhờ viết nội dung mới theo đúng bộ nguyên tắc đó."],
+        prompt: "Đây là vài đoạn nội dung mẫu của thương hiệu chúng tôi:\n\"\"\"\n[dán 2-3 đoạn]\n\"\"\"\n1) Hãy phân tích và rút ra bộ nguyên tắc brand voice (giọng, từ vựng, điều nên/không nên).\n2) Dùng bộ nguyên tắc đó viết [nội dung mới, vd: bài đăng ra mắt tính năng]." },
+      { icon: "🧮", title: "Dựng công cụ nội bộ có logic + brand voice", goal: "Kết hợp Artifact có tính toán với giọng thương hiệu — sản phẩm dùng thật.", adv: true,
+        steps: ["Chọn một công cụ có logic (vd: máy tính báo giá, quiz phân loại khách hàng).", "Yêu cầu Claude dựng Artifact có công thức/logic rõ ràng.", "Nạp brand voice để phần chữ trong công cụ đúng giọng thương hiệu."],
+        prompt: "Hãy dựng trong Artifact một [công cụ có logic, vd: máy tính báo giá dịch vụ] chạy trên trình duyệt. Yêu cầu:\n- Đầu vào: [các trường] · Công thức/logic: [mô tả cách tính]\n- Hiển thị kết quả rõ ràng, có giải thích.\n- Toàn bộ chữ hiển thị dùng giọng thương hiệu sau: [dán brand voice / vài đoạn mẫu].\nSau đó hướng dẫn tôi cách kiểm thử với 2 bộ số liệu mẫu." }
+    ]
+  },
+  {
+    id: "m4", lv: "Cấp 4", tier: "Tự động hoá", diff: "Nâng cao", short: "Claude Cowork",
+    title: "Claude Cowork",
+    intro: "Để Claude làm việc như một cộng sự chủ động: thiết lập, kết nối và xây workflow để “sub-agent” xử lý trọn vẹn công việc từ đầu đến cuối.",
+    tags: ["Cowork", "Sub-agent", "Workflow"],
+    outcomes: [
+      "Hiểu Cowork và mô hình cộng sự AI tự chủ.",
+      "Thiết lập & kết nối Cowork với luồng làm việc của bạn.",
+      "Giao trọn một dự án nhỏ cho sub-agent thực hiện end-to-end."
+    ],
+    lessons: [
+      { t: "Claude Cowork là gì", d: "Từ trợ lý trả lời sang cộng sự chủ động làm việc.", dur: "11'", sum: "Cowork để Claude tự thực hiện chuỗi việc end-to-end, không chỉ trả lời từng câu.", vid: yt("Claude Cowork la gi huong dan") },
+      { t: "Thiết lập & kết nối", d: "Các bước chuẩn bị để Cowork chạy đúng bối cảnh của bạn.", dur: "14'", sum: "Chuẩn bị dữ liệu, quyền truy cập và mục tiêu rõ ràng trước khi giao việc cho Cowork.", vid: yt("Claude Cowork setup connect") },
+      { t: "Xây workflow cộng tác", d: "Chia nhỏ mục tiêu thành các bước Claude tự thực hiện.", dur: "16'", sum: "Mô tả mục tiêu cuối + ràng buộc, để Claude tự lập bước và chạy tuần tự.", vid: yt("Claude Cowork workflow automation") },
+      { t: "Kịch bản thực chiến", d: "Ví dụ thật: tổng hợp, xử lý tài liệu, dựng bản nháp trọn gói.", dur: "15'", sum: "Hợp nhất tài liệu, tạo bản nháp, tổng hợp báo cáo là những việc Cowork gánh tốt.", vid: yt("Claude Cowork use case thuc te") },
+      { t: "Kiểm soát & phê duyệt trong workflow tự động", d: "Đặt điểm dừng phê duyệt ở bước rủi ro; giao quyền dần theo mức tin cậy.", dur: "13'", sum: "Đặt checkpoint để bạn duyệt ở bước quan trọng; mở rộng quyền tự chủ khi đã tin tưởng.", vid: yt("AI agent human in the loop approval checkpoint"), adv: true }
+    ],
+    exercises: [
+      { icon: "🤝", title: "Giao một dự án end-to-end", goal: "Tập giao việc theo mục tiêu thay vì từng câu lệnh nhỏ.",
+        steps: ["Chọn một quy trình lặp lại có nhiều bước (vd: từ ý tưởng → dàn bài → bản nháp bài viết).", "Mô tả mục tiêu cuối cùng và các ràng buộc, để Claude tự chia bước.", "Kiểm tra kết quả từng bước và yêu cầu tự sửa nếu chưa đạt."],
+        prompt: "Tôi muốn giao trọn công việc này cho bạn thực hiện theo nhiều bước:\nMục tiêu cuối: [vd: một bài blog 1000 từ chuẩn SEO về chủ đề X].\nRàng buộc: [đối tượng, giọng văn, từ khoá, deadline].\nHãy: (1) tự lập kế hoạch các bước, (2) thực hiện lần lượt, (3) sau mỗi bước tóm tắt kết quả và hỏi tôi nếu cần quyết định. Bắt đầu bằng kế hoạch." },
+      { icon: "🚦", title: "Thiết kế workflow đa bước có checkpoint phê duyệt", goal: "Tự động hoá nhưng vẫn kiểm soát rủi ro ở đúng chỗ.", adv: true,
+        steps: ["Chọn một quy trình nhiều bước có bước rủi ro (vd: gửi email khách, công bố số liệu).", "Yêu cầu Claude thiết kế workflow và đánh dấu rõ điểm cần bạn duyệt.", "Chạy thử, dừng ở checkpoint, phê duyệt/không rồi cho chạy tiếp."],
+        prompt: "Hãy thiết kế một workflow tự động cho quy trình: [mô tả quy trình nhiều bước].\nYêu cầu:\n- Liệt kê từng bước và đầu ra của bước đó.\n- Đánh dấu rõ những bước RỦI RO cần tôi phê duyệt trước khi tiếp tục (vd: trước khi gửi ra ngoài).\n- Ở mỗi checkpoint, dừng lại và tóm tắt để tôi quyết định 'duyệt / sửa'.\nBắt đầu chạy từ bước 1." }
+    ]
+  },
+  {
+    id: "m5", lv: "Cấp 5", tier: "Chuyên sâu", diff: "Nâng cao", short: "Claude Skills",
+    title: "Claude Skills",
+    intro: "Đóng gói chuyên môn của bạn thành “kho kỹ năng” để Claude thực thi quy trình với chất lượng chuyên gia, ổn định và có thể tái sử dụng.",
+    tags: ["Skills", "Chuẩn hoá", "Plugin"],
+    outcomes: [
+      "Hiểu Skills và cách chúng chuẩn hoá đầu ra.",
+      "Chuẩn bị đúng trước khi triển khai một Skill.",
+      "Đóng gói Skill thành plugin để dùng lại nhiều lần."
+    ],
+    lessons: [
+      { t: "Claude Skills là gì", d: "Biến quy trình lặp lại thành năng lực Claude gọi ra khi cần.", dur: "12'", sum: "Skill = quy trình đóng gói sẵn, Claude tự gọi đúng lúc để ra kết quả nhất quán.", vid: yt("Claude Skills la gi agent skills") },
+      { t: "Chuẩn bị trước khi triển khai", d: "Xác định đầu vào, đầu ra và tiêu chí chất lượng.", dur: "13'", sum: "Rõ đầu vào cần gì, đầu ra ra sao, đạt chuẩn thế nào — trước khi viết Skill.", vid: yt("chuan bi truoc khi tao Claude Skill") },
+      { t: "Sử dụng Skills trong thực tế", d: "Kích hoạt đúng lúc để có kết quả nhất quán.", dur: "14'", sum: "Đặt tên & mô tả Skill sát tình huống để Claude nhận diện và kích hoạt đúng lúc.", vid: yt("su dung Claude Skills thuc te") },
+      { t: "Đóng gói Skill thành plugin", d: "Chia sẻ & tái sử dụng cho cả nhóm.", dur: "12'", sum: "Đóng gói thành plugin để cả nhóm dùng chung một chuẩn chất lượng.", vid: yt("Claude Skills plugin dong goi") },
+      { t: "Phiên bản hoá & bảo trì Skill", d: "Versioning và test case để Skill không 'trôi' chất lượng.", dur: "13'", sum: "Ghi rõ phiên bản, thay đổi và test case; định kỳ kiểm để chất lượng đầu ra ổn định.", vid: yt("versioning maintain prompt skill test case"), adv: true }
+    ],
+    exercises: [
+      { icon: "🛠️", title: "Tạo Skill cho quy trình lặp lại của bạn", goal: "Chuẩn hoá một việc bạn làm đi làm lại để luôn ra kết quả đồng đều.",
+        steps: ["Chọn một quy trình bạn lặp lại (vd: viết mô tả sản phẩm, đánh giá CV).", "Mô tả rõ đầu vào, các bước, và tiêu chí đầu ra đạt chuẩn.", "Yêu cầu Claude soạn thành một hướng dẫn Skill tái sử dụng được."],
+        prompt: "Tôi muốn chuẩn hoá quy trình này thành một \"Skill\" để dùng lại:\nTên quy trình: [vd: Viết mô tả sản phẩm cho sàn TMĐT]\nĐầu vào: [thông tin cần cung cấp mỗi lần]\nCác bước xử lý: [liệt kê nếu có]\nTiêu chí đầu ra đạt chuẩn: [vd: 3 đoạn, có bullet lợi ích, CTA, đúng brand voice]\nHãy viết bản hướng dẫn Skill rõ ràng để lần sau chỉ cần đưa đầu vào là ra kết quả đạt chuẩn." },
+      { icon: "✅", title: "Viết Skill có test case & tiêu chí nghiệm thu", goal: "Đảm bảo Skill cho kết quả ổn định, kiểm chứng được.", adv: true,
+        steps: ["Lấy Skill bạn vừa tạo ở bài trước.", "Yêu cầu Claude bổ sung 3 test case (đầu vào mẫu → đầu ra mong đợi).", "Chạy thử 3 test case, đối chiếu và tinh chỉnh Skill."],
+        prompt: "Đây là Skill của tôi:\n\"\"\"\n[dán nội dung Skill]\n\"\"\"\nHãy nâng cấp nó:\n1) Bổ sung mục 'Tiêu chí nghiệm thu' (checklist rõ ràng để biết đầu ra đạt hay chưa).\n2) Tạo 3 test case: mỗi test gồm đầu vào mẫu và đầu ra mong đợi.\n3) Chạy thử Skill với 3 test case đó và chỉ ra chỗ nào cần chỉnh để kết quả ổn định hơn." }
+    ]
+  },
+  {
+    id: "m6", lv: "Cấp 6", tier: "Kỹ thuật", diff: "Nâng cao", short: "Claude Code",
+    title: "Claude Code",
+    intro: "Tự dựng công cụ riêng mà không cần biết lập trình sâu: nắm Claude Code, kết nối dữ liệu thật qua MCP và làm chủ vấn đề bảo mật doanh nghiệp.",
+    tags: ["Claude Code", "MCP", "Bảo mật"],
+    outcomes: [
+      "Cài đặt & vận hành Claude Code cho công việc của bạn.",
+      "Kết nối Claude với dữ liệu thực qua MCP.",
+      "Tự build công cụ cá nhân: portfolio, app quản lý thời gian…"
+    ],
+    lessons: [
+      { t: "Claude Code: nền tảng & tính năng lõi", d: "Trợ lý lập trình chạy ngay trong terminal/IDE của bạn.", dur: "16'", sum: "Claude Code làm việc trực tiếp với tệp & dự án của bạn — mô tả việc, nó đề xuất & thực thi.", vid: yt("Claude Code getting started overview") },
+      { t: "Best practices & lưu ý khi dùng", d: "Cách ra lệnh, kiểm soát thay đổi, làm việc an toàn.", dur: "14'", sum: "Ra việc nhỏ & rõ, xem thay đổi trước khi chấp nhận, dùng git để dễ hoàn tác.", vid: yt("Claude Code best practices tips") },
+      { t: "MCP — kết nối Claude với dữ liệu thực", d: "Model Context Protocol: nối Claude với công cụ & dữ liệu của bạn.", dur: "18'", sum: "MCP là 'cổng' để Claude đọc dữ liệu & gọi công cụ thật — chỉ mở đúng phạm vi cần.", vid: yt("Model Context Protocol MCP Claude huong dan") },
+      { t: "Bảo mật & dữ liệu doanh nghiệp", d: "Quyền riêng tư, phạm vi truy cập và an toàn dữ liệu.", dur: "13'", sum: "Giới hạn quyền truy cập, tách môi trường, không đưa dữ liệu nhạy cảm khi chưa cần.", vid: yt("Claude Code bao mat du lieu doanh nghiep privacy") },
+      { t: "Tự động hoá với scripts & hooks", d: "Biến lệnh lặp lại thành bước Claude tự chạy chuẩn bị & kiểm tra.", dur: "15'", sum: "Đóng các bước lặp thành script/hook để mỗi lần làm việc đều chạy đúng quy trình.", vid: yt("Claude Code hooks scripts automation"), adv: true },
+      { t: "Nhiều MCP server & phân quyền", d: "Chỉ mở đúng phạm vi dữ liệu cần; tách môi trường test/production.", dur: "14'", sum: "Kết nối nhiều nguồn nhưng phân quyền chặt; ưu tiên quyền chỉ-đọc cho dữ liệu thật.", vid: yt("multiple MCP servers permissions read only"), adv: true }
+    ],
+    exercises: [
+      { icon: "⚙️", title: "Cài đặt & chạy Claude Code lần đầu", goal: "Có môi trường sẵn sàng để tự động hoá và dựng công cụ.",
+        steps: ["Cài Claude Code theo hướng dẫn chính thức và mở trong thư mục dự án.", "Ra một yêu cầu nhỏ (vd: tạo file README mô tả dự án).", "Quan sát cách Claude đề xuất và thực hiện thay đổi."],
+        prompt: "Tôi mới bắt đầu với Claude Code và chưa rành lập trình. Hãy hướng dẫn tôi từng bước:\n1) Kiểm tra Claude Code đã sẵn sàng chưa.\n2) Tạo một dự án đơn giản trong thư mục hiện tại.\n3) Giải thích ngắn gọn mỗi lệnh làm gì trước khi chạy.\nMục tiêu đầu tiên: [vd: tạo trang giới thiệu cá nhân]." },
+      { icon: "🚀", title: "Build công cụ cá nhân đầu tiên", goal: "Tự tay tạo một sản phẩm chạy được mà không cần code tay.",
+        steps: ["Chọn thứ bạn thực sự cần: portfolio, app quản lý thời gian, trang tổng hợp link…", "Mô tả tính năng mong muốn và để Claude Code dựng.", "Chạy thử, phản hồi, lặp lại cho đến khi hài lòng."],
+        prompt: "Hãy giúp tôi tự xây [công cụ, vd: app quản lý thời gian theo pomodoro] chạy được trên trình duyệt. Yêu cầu:\n- Tính năng: [liệt kê]\n- Lưu dữ liệu ngay trên máy tôi.\n- Giao diện gọn, đẹp, dùng được trên điện thoại.\nHãy dựng từng phần, giải thích ngắn gọn và hướng dẫn tôi cách mở thử." },
+      { icon: "🔌", title: "Kết nối dữ liệu thật qua MCP (chỉ-đọc)", goal: "Cho Claude làm việc với dữ liệu thật một cách an toàn.", adv: true,
+        steps: ["Chọn một nguồn dữ liệu bạn muốn Claude đọc (vd: thư mục tài liệu, bảng tính).", "Yêu cầu Claude hướng dẫn kết nối MCP ở chế độ chỉ-đọc.", "Kiểm tra bằng một câu hỏi truy vấn dữ liệu thật, rồi rà soát phạm vi quyền."],
+        prompt: "Tôi muốn cho Claude Code đọc dữ liệu thật của tôi qua MCP một cách AN TOÀN.\nNguồn dữ liệu: [vd: thư mục ./tai-lieu, hoặc file bảng tính].\nHãy:\n1) Hướng dẫn kết nối MCP ở chế độ CHỈ-ĐỌC (không cho phép sửa/xoá).\n2) Giải thích rủi ro bảo mật và cách giới hạn phạm vi truy cập.\n3) Gợi ý 3 câu hỏi mẫu để kiểm tra kết nối hoạt động đúng." }
+    ]
+  }
+];
+
+/* ---------- capstone (bài tập cuối khóa) ---------- */
+const CAPSTONE = {
+  title: "Bài tập cuối khóa — Xây “trợ lý AI” cho công việc của bạn",
+  intro: "Một dự án thực chiến duy nhất buộc bạn dùng lại toàn bộ kỹ năng của 6 cấp: chọn model, viết prompt, dựng Artifact & Project, tự động hoá bằng Cowork & Skills, và tự build công cụ với Claude Code. Làm xong, tự chấm theo bảng tiêu chí để biết mình đang ở đâu.",
+  brief: [
+    "Chọn một quy trình công việc thật của bạn (vd: sản xuất nội dung, xử lý yêu cầu khách hàng, lập báo cáo định kỳ).",
+    "Dùng Claude để tự động hoá quy trình đó từ đầu đến cuối, thay vì làm thủ công.",
+    "Áp dụng ít nhất một kỹ năng tiêu biểu của mỗi cấp (xem “Sản phẩm cần nộp”).",
+    "Ghi lại thời gian tiết kiệm được và một ví dụ đầu ra thực tế để chứng minh hiệu quả."
+  ],
+  deliverables: [
+    { mod: "C1", t: "Bản chọn model: mỗi phần việc dùng Opus/Sonnet/Haiku và cách bạn tiết kiệm token." },
+    { mod: "C2", t: "Bộ custom instructions + ≥5 prompt mẫu theo khung R-C-T-F cho vai trò của bạn." },
+    { mod: "C3", t: "1 Project có kho tri thức nội bộ + 1 Artifact (tài liệu/dashboard) viết đúng brand voice." },
+    { mod: "C4", t: "1 workflow Cowork nhiều bước, có ít nhất 1 checkpoint phê duyệt." },
+    { mod: "C5", t: "1 Skill chuẩn hoá kèm tiêu chí nghiệm thu và ≥3 test case." },
+    { mod: "C6", t: "1 công cụ tự build bằng Claude Code (chạy được); ưu tiên kết nối dữ liệu qua MCP chỉ-đọc." }
+  ],
+  masterPrompt: "Tôi vừa hoàn thành khóa Claude Productivity và muốn làm bài tập cuối khóa: tự động hoá một quy trình công việc thật bằng Claude.\nQuy trình tôi chọn: [mô tả quy trình].\nVai trò của tôi: [vai trò]. Mục tiêu: [kết quả mong muốn + thời gian muốn tiết kiệm].\nHãy đóng vai người hướng dẫn:\n1) Giúp tôi chia dự án thành các phần: chọn model, prompt & custom instructions, Project/Artifact, workflow tự động, Skill, và công cụ tự build.\n2) Với mỗi phần, gợi ý cụ thể tôi cần tạo gì và cách làm.\n3) Cuối cùng, đề xuất cách tôi tự đánh giá kết quả.\nBắt đầu bằng một kế hoạch tổng thể.",
+  levels: ["Chưa làm", "Sơ khai", "Đạt cơ bản", "Thành thạo", "Xuất sắc"],
+  criteria: [
+    { id: "c1", mod: "C1", w: 10, name: "Chọn & dùng đúng model, tối ưu token", desc: "Nêu rõ mỗi phần việc dùng model nào và vì sao; có cách kiểm soát/tiết kiệm token." },
+    { id: "c2", mod: "C2", w: 15, name: "Prompt chuẩn cấu trúc & thư viện prompt", desc: "Có custom instructions đúng vai trò và ≥5 prompt mẫu R-C-T-F tái dùng được." },
+    { id: "c3", mod: "C3", w: 20, name: "Artifact / Project + brand voice", desc: "Có Project với kho tri thức và Artifact chạy được, nội dung đúng brand voice." },
+    { id: "c4", mod: "C4", w: 15, name: "Workflow tự động có kiểm soát", desc: "Workflow nhiều bước do Claude thực hiện, có checkpoint phê duyệt ở bước rủi ro." },
+    { id: "c5", mod: "C5", w: 15, name: "Skill chuẩn hoá có test case", desc: "Skill có tiêu chí nghiệm thu và ≥3 test case cho kết quả ổn định." },
+    { id: "c6", mod: "C6", w: 15, name: "Công cụ tự build / kết nối MCP", desc: "Công cụ tự build chạy được; điểm cộng nếu kết nối dữ liệu thật qua MCP an toàn." },
+    { id: "c7", mod: "★", w: 10, name: "Tính ứng dụng thực tế & trình bày", desc: "Giải quyết được việc thật, tiết kiệm thời gian đo được, trình bày rõ ràng." }
+  ],
+  bands: [
+    { min: 95, label: "Xuất sắc 🏆", note: "Bạn đã làm chủ Claude ở mức có thể huấn luyện lại cho người khác." },
+    { min: 85, label: "Giỏi", note: "Rất vững — chỉ cần trau chuốt vài chi tiết là hoàn hảo." },
+    { min: 70, label: "Khá", note: "Nền tảng tốt; tập trung nâng các tiêu chí còn thấp điểm." },
+    { min: 50, label: "Đạt", note: "Đã đưa được Claude vào việc thật; còn nhiều dư địa cải thiện." },
+    { min: 0,  label: "Cần luyện thêm", note: "Hãy quay lại các cấp có tiêu chí điểm thấp và làm lại phần thực hành." }
+  ]
+};
+
+/* ---------- state ---------- */
+const STORE = "claude-productivity-progress-v1";
+let done = {};
+try { done = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e){ done = {}; }
+let active = 0;
+
+const save = () => { try { localStorage.setItem(STORE, JSON.stringify(done)); } catch(e){} };
+const isDone = id => !!done[id];
+const setDone = (id, v) => { if(v) done[id]=1; else delete done[id]; save(); };
+
+/* điểm chấm bài cuối khóa + checklist sản phẩm (lưu riêng) */
+const RSTORE = "claude-productivity-rubric-v1";
+let rub = {};
+try { rub = JSON.parse(localStorage.getItem(RSTORE)) || {}; } catch(e){ rub = {}; }
+const saveRub = () => { try { localStorage.setItem(RSTORE, JSON.stringify(rub)); } catch(e){} };
+function capScore(){
+  let sum = 0;
+  CAPSTONE.criteria.forEach(c => { const lv = (c.id in rub) ? rub[c.id] : 0; sum += c.w * (lv / 4); });
+  const pct = Math.round(sum);
+  const rated = CAPSTONE.criteria.filter(c => c.id in rub).length;
+  const band = CAPSTONE.bands.find(b => pct >= b.min) || CAPSTONE.bands[CAPSTONE.bands.length - 1];
+  return { pct, rated, band };
+}
+
+function itemsOf(m){ const ids=[]; m.lessons.forEach((_,i)=>ids.push(m.id+"-l"+i)); m.exercises.forEach((_,i)=>ids.push(m.id+"-e"+i)); return ids; }
+function modProgress(m){ const ids=itemsOf(m); const d=ids.filter(isDone).length; return { d, t: ids.length, pct: ids.length? Math.round(d/ids.length*100):0 }; }
+function totalProgress(){ let d=0,t=0; DATA.forEach(m=>{ const p=modProgress(m); d+=p.d; t+=p.t; }); return { d, t, pct: t? Math.round(d/t*100):0 }; }
+function lessonCounts(){ let d=0,t=0; DATA.forEach(m=>m.lessons.forEach((_,i)=>{ t++; if(isDone(m.id+"-l"+i)) d++; })); return d+"/"+t; }
+
+const el = (h)=>{ const t=document.createElement("template"); t.innerHTML=h.trim(); return t.content.firstChild; };
+
+function renderTimeline(){
+  const tl = document.getElementById("timeline"); tl.innerHTML="";
+  DATA.forEach((m,i)=>{
+    const p = modProgress(m);
+    const b = el(`<button class="tl ${i===active?'active':''} ${p.pct===100?'complete':''}" data-i="${i}">
+      <span class="done-tick">✓</span><span class="lv">${m.lv}</span>
+      <span class="nm">${m.short}</span>
+      <span class="barmini"><i style="width:${p.pct}%"></i></span></button>`);
+    b.onclick=()=>{ active=i; renderAll(); document.getElementById('main').scrollIntoView({behavior:'smooth',block:'start'}); };
+    tl.appendChild(b);
+  });
+}
+
+function renderRail(){
+  const rail = document.getElementById("rail");
+  rail.querySelectorAll(".navitem").forEach(n=>n.remove());
+  DATA.forEach((m,i)=>{
+    const p = modProgress(m);
+    const b = el(`<button class="navitem ${i===active?'active':''}" data-i="${i}">
+      <span class="no">${String(i+1).padStart(2,'0')}</span>
+      <span class="txt"><span class="t1">${m.title}</span>
+      <span class="t2">${p.d}/${p.t} · ${p.pct}%</span></span></button>`);
+    b.onclick=()=>{ active=i; renderAll(); document.getElementById('main').scrollIntoView({behavior:'smooth',block:'start'}); };
+    rail.appendChild(b);
+  });
+  const s = capScore();
+  const cp = el(`<button class="navitem cap ${active==='cap'?'active':''}">
+    <span class="no">★</span>
+    <span class="txt"><span class="t1">Bài tập cuối khóa</span>
+    <span class="t2">${s.rated? s.pct+'/100 · '+s.band.label : 'Đánh giá tổng hợp'}</span></span></button>`);
+  cp.onclick=()=>{ active='cap'; renderAll(); document.getElementById('main').scrollIntoView({behavior:'smooth',block:'start'}); };
+  rail.appendChild(cp);
+}
+
+function renderCapCta(){
+  const b = document.getElementById("capCtaScore"); if(!b) return;
+  const s = capScore(); b.textContent = s.rated ? s.pct+"/100" : "Chưa chấm";
+}
+
+function renderMain(){
+  if(active==='cap'){ renderCapstone(); renderCapCta(); return; }
+  const m = DATA[active];
+  const main = document.getElementById("main"); main.innerHTML="";
+
+  main.appendChild(el(`<div class="panel-head">
+    <div class="tagrow">
+      <span class="tag level">${m.lv} · ${m.tier}</span>
+      <span class="tag diff">${m.diff}</span>
+      ${m.tags.map(t=>`<span class="tag">${t}</span>`).join("")}
+    </div>
+    <h2>${m.title}</h2><p>${m.intro}</p></div>`));
+
+  main.appendChild(el(`<div class="outcomes"><h4>Sau cấp này bạn làm được</h4>
+    <ul>${m.outcomes.map(o=>`<li>${o}</li>`).join("")}</ul></div>`));
+
+  const advL = m.lessons.filter(l=>l.adv).length;
+  main.appendChild(el(`<div class="sec-label"><h3>Bài học</h3><span class="cnt">${m.lessons.length} bài · ${advL} nâng cao</span><span class="rule"></span></div>`));
+  const lc = el(`<div class="lessons"></div>`);
+  m.lessons.forEach((L,i)=>{
+    const id = m.id+"-l"+i;
+    const row = el(`<div class="lesson ${isDone(id)?'done':''}">
+      <button class="check" aria-label="Đánh dấu hoàn thành">✓</button>
+      <div class="body">
+        <div class="l-top"><span class="l-no">${m.lv.replace('Cấp ','')}·${i+1}</span>
+          <span class="l-title">${L.t}</span>
+          ${L.adv?'<span class="chip-adv">Nâng cao</span>':''}
+          <span class="l-dur">${L.dur}</span></div>
+        <div class="l-desc">${L.d}</div>
+        <div class="l-sum"><span class="k">Cốt lõi</span><span>${L.sum}</span></div>
+        <div class="l-actions"><a class="vidbtn" href="${L.vid}" target="_blank" rel="noopener"><span class="play">▶</span>Xem video bài học</a></div>
+      </div></div>`);
+    row.querySelector(".check").onclick=()=>{ setDone(id,!isDone(id)); renderAll(); };
+    lc.appendChild(row);
+  });
+  main.appendChild(lc);
+
+  const advE = m.exercises.filter(e=>e.adv).length;
+  main.appendChild(el(`<div class="sec-label"><h3>Bài tập thực hành</h3><span class="cnt">${m.exercises.length} bài · ${advE} nâng cao</span><span class="rule"></span></div>`));
+  const ec = el(`<div class="exercises"></div>`);
+  m.exercises.forEach((E,i)=>{
+    const id = m.id+"-e"+i;
+    const card = el(`<div class="ex ${isDone(id)?'done':''} ${E.adv?'adv':''}">
+      <div class="ex-head">
+        <div class="ex-icon">${E.icon}</div>
+        <div class="ht"><div class="htop"><h4>Thực hành ${i+1}: ${E.title}</h4>${E.adv?'<span class="chip-adv">Nâng cao</span>':''}</div><div class="goal">${E.goal}</div></div>
+      </div>
+      <ol class="ex-steps">${E.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+      <div class="prompt">
+        <div class="prompt-h"><span class="dot"></span>Prompt gợi ý — copy &amp; thử ngay
+          <button class="copy">⧉ Copy</button></div>
+        <pre></pre>
+      </div>
+      <div class="ex-foot">
+        <button class="markdone">${isDone(id)?'✓ Đã hoàn thành':'Đánh dấu hoàn thành'}</button>
+        <span class="tip"><b>Mẹo:</b> thay các phần trong [ ] bằng bối cảnh thật của bạn.</span>
+      </div></div>`);
+    card.querySelector("pre").textContent = E.prompt;
+    const copyBtn = card.querySelector(".copy");
+    copyBtn.onclick=()=>{ navigator.clipboard.writeText(E.prompt).then(()=>{
+      copyBtn.textContent="✓ Đã copy"; copyBtn.classList.add("ok"); toast("Đã copy prompt vào clipboard");
+      setTimeout(()=>{ copyBtn.textContent="⧉ Copy"; copyBtn.classList.remove("ok"); },1600); }); };
+    card.querySelector(".markdone").onclick=()=>{ setDone(id,!isDone(id)); renderAll(); };
+    ec.appendChild(card);
+  });
+  main.appendChild(ec);
+
+  const navf = el(`<div class="ex-foot" style="justify-content:space-between;margin-top:34px;border-top:1px solid var(--line);padding-top:22px">
+    <button class="markdone" id="prevM" ${active===0?'disabled style="opacity:.4;cursor:default"':''}>← Cấp trước</button>
+    <button class="markdone" id="nextM" ${active===DATA.length-1?'disabled style="opacity:.4;cursor:default"':''}>Cấp tiếp theo →</button></div>`);
+  main.appendChild(navf);
+  const prev=navf.querySelector("#prevM"), next=navf.querySelector("#nextM");
+  if(active>0) prev.onclick=()=>{active--;renderAll();document.getElementById('main').scrollIntoView({behavior:'smooth',block:'start'});};
+  if(active<DATA.length-1) next.onclick=()=>{active++;renderAll();document.getElementById('main').scrollIntoView({behavior:'smooth',block:'start'});};
+}
+
+function renderCapstone(){
+  const main = document.getElementById("main"); main.innerHTML="";
+  const C = CAPSTONE;
+
+  main.appendChild(el(`<div class="panel-head">
+    <div class="tagrow"><span class="tag level">Cuối khóa</span><span class="tag diff">Tổng hợp 6 cấp</span><span class="tag">Đánh giá /100</span></div>
+    <h2>${C.title}</h2><p>${C.intro}</p></div>`));
+
+  main.appendChild(el(`<div class="outcomes"><h4>Đề bài</h4><ul>${C.brief.map(b=>`<li>${b}</li>`).join("")}</ul></div>`));
+
+  const doneD = C.deliverables.filter((_,i)=>rub["d"+i]).length;
+  main.appendChild(el(`<div class="sec-label"><h3>Sản phẩm cần nộp</h3><span class="cnt">${doneD}/${C.deliverables.length} hạng mục</span><span class="rule"></span></div>`));
+  const dl = el(`<div class="lessons"></div>`);
+  C.deliverables.forEach((d,i)=>{
+    const key="d"+i; const on=!!rub[key];
+    const row = el(`<div class="lesson ${on?'done':''}">
+      <button class="check" aria-label="Đánh dấu đã nộp">✓</button>
+      <div class="body"><div class="l-top"><span class="l-no">${d.mod}</span><span class="l-title">${d.t}</span></div></div></div>`);
+    row.querySelector(".check").onclick=()=>{ if(rub[key]) delete rub[key]; else rub[key]=1; saveRub(); renderMain(); renderRail(); };
+    dl.appendChild(row);
+  });
+  main.appendChild(dl);
+
+  main.appendChild(el(`<div class="sec-label"><h3>Gợi ý bắt đầu</h3><span class="cnt">prompt khởi động</span><span class="rule"></span></div>`));
+  const pr = el(`<div class="prompt" style="margin-top:0;margin-bottom:34px">
+    <div class="prompt-h"><span class="dot"></span>Prompt khởi động dự án cuối khóa <button class="copy">⧉ Copy</button></div>
+    <pre></pre></div>`);
+  pr.querySelector("pre").textContent = C.masterPrompt;
+  const cb = pr.querySelector(".copy");
+  cb.onclick=()=>{ navigator.clipboard.writeText(C.masterPrompt).then(()=>{ cb.textContent="✓ Đã copy"; cb.classList.add("ok"); toast("Đã copy prompt vào clipboard"); setTimeout(()=>{cb.textContent="⧉ Copy";cb.classList.remove("ok");},1600); }); };
+  main.appendChild(pr);
+
+  main.appendChild(el(`<div class="sec-label"><h3>Bảng đánh giá &amp; chấm điểm</h3><span class="cnt">7 tiêu chí · 100đ</span><span class="rule"></span></div>`));
+
+  const s = capScore();
+  main.appendChild(el(`<div class="score-card">
+    <div class="sc-num"><span class="sc-big">${s.rated? s.pct : '–'}</span><span class="sc-den">/100</span></div>
+    <div class="sc-mid">
+      <div class="sc-band">${s.rated? s.band.label : 'Chưa chấm'}</div>
+      <div class="sc-note">${s.rated? s.band.note : 'Tự đánh giá từng tiêu chí bên dưới (5 mức) để hệ thống tính điểm và xếp loại.'}</div>
+      <div class="sc-bar"><i style="width:${s.pct}%"></i></div>
+      <div class="sc-meta">${s.rated}/7 tiêu chí đã chấm</div>
+    </div></div>`));
+
+  const rb = el(`<div class="rubric"></div>`);
+  C.criteria.forEach(c=>{
+    const cur = (c.id in rub)? rub[c.id] : null;
+    const row = el(`<div class="rub">
+      <div class="rub-info"><span class="rub-mod">${c.mod}</span>
+        <div class="rub-tx"><div class="rub-name">${c.name}</div><div class="rub-desc">${c.desc}</div></div>
+        <span class="rub-w">${c.w}đ</span></div>
+      <div class="rub-levels"></div></div>`);
+    const lvBox = row.querySelector(".rub-levels");
+    C.levels.forEach((L,li)=>{
+      const btn = el(`<button class="rlv ${cur===li?'on':''}" title="${L}"><span class="rlv-n">${li}</span><span class="rlv-l">${L}</span></button>`);
+      btn.onclick=()=>{ rub[c.id]=li; saveRub(); renderMain(); renderRail(); };
+      lvBox.appendChild(btn);
+    });
+    rb.appendChild(row);
+  });
+  main.appendChild(rb);
+
+  const rr = el(`<div class="ex-foot" style="justify-content:space-between;margin-top:24px;border-top:1px solid var(--line);padding-top:22px">
+    <button class="markdone" id="capReset">⟲ Xóa điểm chấm</button>
+    <button class="markdone" id="backM">← Về nội dung khóa học</button></div>`);
+  main.appendChild(rr);
+  rr.querySelector("#capReset").onclick=()=>{ CAPSTONE.criteria.forEach(c=>delete rub[c.id]); saveRub(); renderMain(); renderRail(); toast("Đã xóa điểm chấm"); };
+  rr.querySelector("#backM").onclick=()=>{ active=DATA.length-1; renderAll(); document.getElementById('main').scrollIntoView({behavior:'smooth',block:'start'}); };
+}
+
+function renderRing(){
+  const p = totalProgress(); const C = 2*Math.PI*19;
+  const arc = document.getElementById("ringArc");
+  arc.setAttribute("stroke-dasharray", C.toFixed(1));
+  arc.setAttribute("stroke-dashoffset", (C*(1-p.pct/100)).toFixed(1));
+  document.getElementById("ringNum").innerHTML = p.pct+"%<small>Hoàn thành</small>";
+  document.getElementById("metaDone").textContent = lessonCounts();
+}
+function renderAll(){ renderTimeline(); renderRail(); renderMain(); renderRing(); renderCapCta(); }
+
+let toastT;
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),1800); }
+
+const root=document.documentElement;
+document.getElementById("themeBtn").onclick=()=>{
+  const cur = root.getAttribute("data-theme");
+  const isDark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.setAttribute("data-theme", isDark?"light":"dark");
+};
+document.getElementById("resetBtn").onclick=()=>{
+  if(confirm("Đặt lại toàn bộ tiến độ học và điểm chấm cuối khóa? Hành động này không thể hoàn tác.")){ done={}; save(); rub={}; saveRub(); renderAll(); toast("Đã đặt lại tiến độ"); }
+};
+
+document.getElementById("capCta").onclick=()=>{ active='cap'; renderAll(); document.getElementById('main').scrollIntoView({behavior:'smooth',block:'start'}); };
+
+renderAll();
+</script>
